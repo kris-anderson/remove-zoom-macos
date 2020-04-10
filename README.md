@@ -3,16 +3,22 @@ A Shell script for macOS that will completely uninstall the Zoom Desktop Client 
 
 **Instructions:**
 
-1. Download the `remove_zoom_macos.sh` script
+1. Download the `remove_zoom_macos.sh` script.
 
-2. Open your terminal and add execute permissions to the script 
+2. Open your terminal and `cd` into the directory where you downloaded the script. For example:
 
-```bash
-chmod +x remove_zoom_macos.sh
-```
+    ```bash
+    cd ~/Downloads
+    ```
 
-3. Run the script
+3. Add execute permissions to the script.
 
-```bash
-./chmod +x remove_zoom_macos.sh
-```
+    ```bash
+    chmod +x remove_zoom_macos.sh
+    ```
+
+4. Run the script.
+
+    ```bash
+    ./remove_zoom_macos.sh
+    ```
