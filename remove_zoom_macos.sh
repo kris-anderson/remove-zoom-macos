@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 
 # pretty colors
-ESC_SEQ="\x1b["
-COL_RESET=$ESC_SEQ"39;49;00m"
-COL_GREEN=$ESC_SEQ"32;01m"
-COL_YELLOW=$ESC_SEQ"33;01m"
-COL_RED=$ESC_SEQ"31;01m"
-if [[ $- == *i* ]]; then
+if [ "$TERM" == "dumb" ]; then
+    COL_RESET=""
+    COL_GREEN=""
+    COL_YELLOW=""
+    COL_RED=""
+    BOLD=""
+    NORMAL=""
+else
+    ESC_SEQ="\x1b["
+    COL_RESET=$ESC_SEQ"39;49;00m"
+    COL_GREEN=$ESC_SEQ"32;01m"
+    COL_YELLOW=$ESC_SEQ"33;01m"
+    COL_RED=$ESC_SEQ"31;01m"
     BOLD=$(tput bold)
     NORMAL=$(tput sgr0)
 fi
