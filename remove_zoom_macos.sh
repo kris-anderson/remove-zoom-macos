@@ -314,3 +314,18 @@ else
     not_found
 
 fi
+
+# ~/Library/Cookies/us.zoom.xos.binarycookies
+
+if [ -f "$HOME/Library/Cookies/us.zoom.xos.binarycookies" ] || [ -d "$HOME/Library/Cookies/us.zoom.xos.binarycookies" ]; then
+
+    sudo rm -rf "$HOME/Library/Cookies/us.zoom.xos.binarycookies"
+    printf "%s/Library/Cookies/us.zoom.xos.binarycookies " "$HOME"
+    deleted
+
+else
+
+    printf "%s/Library/Cookies/us.zoom.xos.binarycookies " "$HOME"
+    not_found
+
+fi
