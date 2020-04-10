@@ -24,6 +24,8 @@ function terminated() {
     echo -e "${COL_RED}[terminated]${COL_RESET} " #$1
 }
 
+loggedInUser=$(stat -f "%Su" /dev/console)
+
 echo ""
 echo -e "${BOLD}Please Note:${NORMAL} This script may prompt you for your password if it finds anything that needs to be removed."
 
@@ -61,15 +63,15 @@ else
 
 fi
 
-if [ -f "$HOME/Applications/zoom.us.app" ] || [ -d "$HOME/Applications/zoom.us.app" ]; then
+if [ -f "/Users/$loggedInUser/Applications/zoom.us.app" ] || [ -d "/Users/$loggedInUser/Applications/zoom.us.app" ]; then
 
-    sudo rm -rf "$HOME/Applications/zoom.us.app"
-    printf "Zoom app in %s/Applications/ " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Applications/zoom.us.app"
+    printf "Zoom app in /Users/%s/Applications/ " "$loggedInUser"
     deleted
 
 else
 
-    printf "Zoom app in %s/Applications/ " "$HOME"
+    printf "Zoom app in /Users/%s/Applications/ " "$loggedInUser"
     not_found
 
 fi
@@ -110,15 +112,15 @@ else
 
 fi
 
-if [ -f "$HOME/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin" ] || [ -f "$HOME/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin" ]; then
+if [ -f "/Users/$loggedInUser/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin" ] || [ -f "/Users/$loggedInUser/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin" ]; then
 
-    sudo rm -rf "/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin"
-    printf "%s/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin"
+    printf "/Users/%s/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin " "$HOME"
+    printf "/Users/%s/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin " "$loggedInUser"
     not_found
 
 fi
@@ -127,30 +129,30 @@ fi
 echo ""
 echo -e "${BOLD}Removing extra cruft that Zoom leaves behind...${NORMAL}"
 
-if [ -f "$HOME/.zoomus" ] || [ -d "$HOME/.zoomus" ]; then
+if [ -f "/Users/$loggedInUser/.zoomus" ] || [ -d "/Users/$loggedInUser/.zoomus" ]; then
 
-    sudo rm -rf "$HOME/.zoomus"
-    printf "%s/.zoomus " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/.zoomus"
+    printf "/Users/%s/.zoomus " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/.zoomus " "$HOME"
+    printf "/Users/%s/.zoomus " "$loggedInUser"
     not_found
 
 fi
 
 # ~/Library/Application\ Support/zoom.us
 
-if [ -f "$HOME/Library/Application Support/zoom.us" ] || [ -d "$HOME/Library/Application Support/zoom.us" ]; then
+if [ -f "/Users/$loggedInUser/Library/Application Support/zoom.us" ] || [ -d "/Users/$loggedInUser/Library/Application Support/zoom.us" ]; then
 
-    sudo rm -rf "$HOME/Library/Application Support/zoom.us/"
-    printf "%s/Library/Application Support/zoom.us/ " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Application Support/zoom.us/"
+    printf "/Users/%s/Library/Application Support/zoom.us/ " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Application Support/zoom.us/ " "$HOME"
+    printf "/Users/%s/Library/Application Support/zoom.us/ " "$loggedInUser"
     not_found
 
 fi
@@ -171,15 +173,15 @@ else
 
 fi
 
-if [ -f "$HOME/Library/Caches/us.zoom.xos" ] || [ -d "$HOME/Library/Caches/us.zoom.xos" ]; then
+if [ -f "/Users/$loggedInUser/Library/Caches/us.zoom.xos" ] || [ -d "/Users/$loggedInUser/Library/Caches/us.zoom.xos" ]; then
 
-    sudo rm -rf "$HOME/Library/Caches/us.zoom.xos"
-    printf "%s/Library/Caches/us.zoom.xos " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Caches/us.zoom.xos"
+    printf "/Users/%s/Library/Caches/us.zoom.xos " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Caches/us.zoom.xos " "$HOME"
+    printf "/Users/%s/Library/Caches/us.zoom.xos " "$loggedInUser"
     not_found
 
 fi
@@ -200,15 +202,15 @@ else
 
 fi
 
-if [ -f "$HOME/Library/Logs/zoom.us" ] || [ -d "$HOME/Library/Logs/zoom.us" ]; then
+if [ -f "/Users/$loggedInUser/Library/Logs/zoom.us" ] || [ -d "/Users/$loggedInUser/Library/Logs/zoom.us" ]; then
 
-    sudo rm -rf "$HOME/Library/Logs/zoom.us"
-    printf "%s/Library/Logs/zoom.us " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Logs/zoom.us"
+    printf "/Users/%s/Library/Logs/zoom.us " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Logs/zoom.us " "$HOME"
+    printf "/Users/%s/Library/Logs/zoom.us " "$loggedInUser"
     not_found
 
 fi
@@ -229,15 +231,15 @@ else
 
 fi
 
-if [ -f "$HOME/Library/Logs/zoominstall.log" ] || [ -d "$HOME/Library/Logs/zoominstall.log" ]; then
+if [ -f "/Users/$loggedInUser/Library/Logs/zoominstall.log" ] || [ -d "/Users/$loggedInUser/Library/Logs/zoominstall.log" ]; then
 
-    sudo rm -rf "$HOME/Library/Logs/zoominstall.log"
-    printf "%s/Library/Logs/zoominstall.log " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Logs/zoominstall.log"
+    printf "/Users/%s/Library/Logs/zoominstall.log " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Logs/zoominstall.log " "$HOME"
+    printf "/Users/%s/Library/Logs/zoominstall.log " "$loggedInUser"
     not_found
 
 fi
@@ -258,15 +260,15 @@ else
 
 fi
 
-if [ -f "$HOME/Library/Preferences/ZoomChat.plist" ] || [ -d "$HOME/Library/Preferences/ZoomChat.plist" ]; then
+if [ -f "/Users/$loggedInUser/Library/Preferences/ZoomChat.plist" ] || [ -d "/Users/$loggedInUser/Library/Preferences/ZoomChat.plist" ]; then
 
-    sudo rm -rf "$HOME/Library/Preferences/ZoomChat.plist"
-    printf "%s/Library/Preferences/ZoomChat.plist " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Preferences/ZoomChat.plist"
+    printf "/Users/%s/Library/Preferences/ZoomChat.plist " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Preferences/ZoomChat.plist " "$HOME"
+    printf "/Users/%s/Library/Preferences/ZoomChat.plist " "$loggedInUser"
     not_found
 
 fi
@@ -287,45 +289,45 @@ else
 
 fi
 
-if [ -f "$HOME/Library/Preferences/us.zoom.xos.plist" ] || [ -d "$HOME/Library/Preferences/us.zoom.xos.plist" ]; then
+if [ -f "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.plist" ] || [ -d "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.plist" ]; then
 
-    sudo rm -rf "$HOME/Library/Preferences/us.zoom.xos.plist"
-    printf "%s/Library/Preferences/us.zoom.xos.plist " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.plist"
+    printf "/Users/%s/Library/Preferences/us.zoom.xos.plist " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Preferences/us.zoom.xos.plist " "$HOME"
+    printf "/Users/%s/Library/Preferences/us.zoom.xos.plist " "$loggedInUser"
     not_found
 
 fi
 
 # ~/Library/Saved Application State/us.zoom.xos.savedState
 
-if [ -f "$HOME/Library/Saved Application State/us.zoom.xos.savedState" ] || [ -d "$HOME/Library/Saved Application State/us.zoom.xos.savedState" ]; then
+if [ -f "/Users/$loggedInUser/Library/Saved Application State/us.zoom.xos.savedState" ] || [ -d "/Users/$loggedInUser/Library/Saved Application State/us.zoom.xos.savedState" ]; then
 
-    sudo rm -rf "$HOME/Library/Saved Application State/us.zoom.xos.savedState"
-    printf "%s/Library/Saved Application State/us.zoom.xos.savedState " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Saved Application State/us.zoom.xos.savedState"
+    printf "/Users/%s/Library/Saved Application State/us.zoom.xos.savedState " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Saved Application State/us.zoom.xos.savedState " "$HOME"
+    printf "/Users/%s/Library/Saved Application State/us.zoom.xos.savedState " "$loggedInUser"
     not_found
 
 fi
 
 # ~/Library/Cookies/us.zoom.xos.binarycookies
 
-if [ -f "$HOME/Library/Cookies/us.zoom.xos.binarycookies" ] || [ -d "$HOME/Library/Cookies/us.zoom.xos.binarycookies" ]; then
+if [ -f "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies" ] || [ -d "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies" ]; then
 
-    sudo rm -rf "$HOME/Library/Cookies/us.zoom.xos.binarycookies"
-    printf "%s/Library/Cookies/us.zoom.xos.binarycookies " "$HOME"
+    sudo rm -rf "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies"
+    printf "/Users/%s/Library/Cookies/us.zoom.xos.binarycookies " "$loggedInUser"
     deleted
 
 else
 
-    printf "%s/Library/Cookies/us.zoom.xos.binarycookies " "$HOME"
+    printf "/Users/%s/Library/Cookies/us.zoom.xos.binarycookies " "$loggedInUser"
     not_found
 
 fi
