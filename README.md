@@ -2,19 +2,22 @@
 
 A bash script for macOS that will completely uninstall the Zoom Desktop Client and all of the additional cruft it installs.
 
+![shellcheck](https://img.shields.io/badge/shellcheck-pass-brightgreen "ShellCheck") ![issues](https://img.shields.io/github/issues/kris-anderson/remove-zoom-macos "Issues") ![script size](https://img.shields.io/github/size/kris-anderson/remove-zoom-macos/remove_zoom_macos.sh "Script Size") ![license type](https://img.shields.io/github/license/kris-anderson/remove-zoom-macos "License Type")
+
 ## Highlights
 
 * Works on any macOS computer
-* Can also be deployed via Jamf within your enterprise
+* Can also be deployed via Jamf within your enterprise environment
 * Provides helpful output letting you know what it found and deleted
 
 ## What it does
 
 * Kills the Zoom process if it is running
-* Removes the Zoom application from the `/Applications/` or `~/Applications/` folders
+* Removes the Zoom application from the `/Applications/` or `~/Applications/` directories
 * Uninstalls the Zoom Audio Device
 * Removes the Zoom Internet Plugin
-* Removes the `~/.zoomus/` directory from your home folder
+* Removes a defaults value
+* Removes the `~/.zoomus/` directory from your home directory
 * Removes the cache directories Zoom uses
 * Removes the log files Zoom uses
 * Removes additional preferences and configuration files
