@@ -43,10 +43,12 @@ loggedInUser=$(stat -f "%Su" /dev/console)
 ### remove zoom ###
 ###################
 
-# prompt the user that the script may ask for their password
+# prompt the user for their password if required
 
 echo ""
-echo -e "${BOLD}Please Note:${NORMAL} This script may prompt you for your password if it finds anything that needs to be removed."
+echo -e "${BOLD}Please Note:${NORMAL} This script will prompt for your password if you are not already running as sudo."
+
+sudo -v
 
 # kill the Zoom process if it's running
 
@@ -66,7 +68,7 @@ else
 
 fi
 
-# remove the zoom application
+# remove the Zoom application
 
 echo ""
 echo -e "${BOLD}Removing the Zoom Application...${NORMAL}"
@@ -127,7 +129,25 @@ for ENTRY in "${ZOOM_PLUGIN[@]}"; do
     fi
 done
 
-# remove extra zoom cruft
+# remove Zoom defaults
+
+echo ""
+echo -e "${BOLD}Removing Zoom defaults preferences...${NORMAL}"
+
+if ! sudo defaults read us.zoom.xos 2>&1 | grep -Eq "Domain us.zoom.xos does not exist"; then
+
+    sudo defaults delete us.zoom.xos
+    printf "sudo defaults read us.zoom.xos "
+    deleted
+
+else
+
+    printf "sudo defaults read us.zoom.xos "
+    not_found
+
+fi
+
+# remove extra Zoom cruft
 
 echo ""
 echo -e "${BOLD}Removing extra cruft that Zoom leaves behind...${NORMAL}"
