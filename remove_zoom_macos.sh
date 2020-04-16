@@ -147,6 +147,22 @@ else
 
 fi
 
+echo ""
+echo -e "${BOLD}Removing pkgutil history...${NORMAL}"
+
+if pkgutil --pkgs | grep -Eq "us.zoom.pkg.videmeeting"; then
+
+    sudo pkgutil --forget us.zoom.pkg.videmeeting &> /dev/null
+    printf "pkgutil history for us.zoom.pkg.videmeeting "
+    deleted
+
+else
+
+    printf "pkgutil history for us.zoom.pkg.videmeeting "
+    not_found
+
+fi
+
 # remove extra Zoom cruft
 
 echo ""
