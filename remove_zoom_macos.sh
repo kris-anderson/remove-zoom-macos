@@ -200,12 +200,12 @@ done
 echo ""
 echo -e "${BOLD}Removing package receipts for Zoom...${NORMAL}"
 
-declare -a ZOOM_RECEIPTS=(
+declare -a ZOOM_CLIENT_RECEIPTS=(
     "/private/var/db/receipts/us.zoom.pkg.videmeeting.bom"
     "/private/var/db/receipts/us.zoom.pkg.videmeeting.plist"
 )
 
-for ENTRY in "${ZOOM_RECEIPTS[@]}"; do
+for ENTRY in "${ZOOM_CLIENT_RECEIPTS[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         printf "%s " "${ENTRY}"
@@ -329,12 +329,12 @@ fi
 echo ""
 echo -e "${BOLD}Removing package receipts for Zoom OL Plugin...${NORMAL}"
 
-declare -a ZOOM_RECEIPTS=(
+declare -a ZOOM_OL_RECEIPTS=(
     "/private/var/db/receipts/ZoomMacOutlookPlugin.pkg.bom"
     "/private/var/db/receipts/ZoomMacOutlookPlugin.pkg.plist"
 )
 
-for ENTRY in "${ZOOM_RECEIPTS[@]}"; do
+for ENTRY in "${ZOOM_OL_RECEIPTS[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         printf "%s " "${ENTRY}"
