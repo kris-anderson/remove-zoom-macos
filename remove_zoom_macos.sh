@@ -197,6 +197,26 @@ for ENTRY in "${ZOOM_CRUFT[@]}"; do
 
 done
 
+echo ""
+echo -e "${BOLD}Removing package receipts for Zoom...${NORMAL}"
+
+declare -a ZOOM_RECEIPTS=(
+    "/private/var/db/receipts/us.zoom.pkg.videmeeting.bom"
+    "/private/var/db/receipts/us.zoom.pkg.videmeeting.plist"
+)
+
+for ENTRY in "${ZOOM_RECEIPTS[@]}"; do
+    if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
+        sudo rm -rf "${ENTRY}"
+        printf "%s " "${ENTRY}"
+        deleted
+    else
+        printf "%s " "${ENTRY}"
+        not_found
+    fi
+
+done
+
 #############################
 ### remove outlook plugin ###
 #############################
@@ -222,6 +242,8 @@ fi
 echo ""
 echo -e "${BOLD}Unloading Zoom OL Plugin LaunchAgent...${NORMAL}"
 
+# Unload pluginagent LaunchAgent if zOutlookPluginAgent running
+
 if pgrep -i zOutlookPluginAgent >/dev/null; then
 
     su - "$loggedInUser" -c "/bin/launchctl unload -w /Library/LaunchAgents/us.zoom.pluginagent.plist"
@@ -244,6 +266,8 @@ fi
 echo ""
 echo -e "${BOLD}Deleting Zoom OL Plugin folders...${NORMAL}"
 
+# delete ZoomOutlook plugin folder
+
 declare -a ZOOM_OUTLOOK_APPLICATION=(
     "/Applications/ZoomOutlookPlugin"
     "/Users/$loggedInUser/Applications/ZoomOutlookPlugin"
@@ -263,6 +287,7 @@ done
 
 echo ""
 echo -e "${BOLD}Cleaning up Zoom OL Plugin cruft...${NORMAL}"
+# cleanup Zoom Outlook plugin cruft
 
 declare -a ZOOM_OUTLOOK_CRUFT=(
     "/Library/LaunchAgents/us.zoom.pluginagent.plist"
@@ -300,3 +325,25 @@ else
     not_found
 
 fi
+
+echo ""
+echo -e "${BOLD}Removing package receipts for Zoom OL Plugin...${NORMAL}"
+
+declare -a ZOOM_RECEIPTS=(
+    "/private/var/db/receipts/ZoomMacOutlookPlugin.pkg.bom"
+    "/private/var/db/receipts/ZoomMacOutlookPlugin.pkg.plist"
+)
+
+for ENTRY in "${ZOOM_RECEIPTS[@]}"; do
+    if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
+        sudo rm -rf "${ENTRY}"
+        printf "%s " "${ENTRY}"
+        deleted
+    else
+        printf "%s " "${ENTRY}"
+        not_found
+    fi
+
+done
+
+exit 0
