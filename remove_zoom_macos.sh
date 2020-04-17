@@ -194,4 +194,109 @@ for ENTRY in "${ZOOM_CRUFT[@]}"; do
         printf "%s " "${ENTRY}"
         not_found
     fi
+
 done
+
+#############################
+### remove outlook plugin ###
+#############################
+
+echo ""
+echo -e "${BOLD}Killing Zoom OL Plugin Launcher if running...${NORMAL}"
+
+# kill PluginLauncher if running
+
+if pgrep -i PluginLauncher >/dev/null; then
+
+    sudo kill "$(pgrep -i PluginLauncher)"
+    printf "Zoom PluginLauncher process "
+    terminated
+
+else
+
+    printf "Zoom PluginLauncher process "
+    not_found
+
+fi
+
+echo ""
+echo -e "${BOLD}Unloading Zoom OL Plugin LaunchAgent...${NORMAL}"
+
+if pgrep -i zOutlookPluginAgent >/dev/null; then
+
+    su - "$loggedInUser" -c "/bin/launchctl unload -w /Library/LaunchAgents/us.zoom.pluginagent.plist"
+    if pgrep -i zOutlookPluginAgent >/dev/null; then
+        su - "$loggedInUser" -c "/bin/launchctl unload -wF /Library/LaunchAgents/us.zoom.pluginagent.plist"
+        printf "Zoom OutlookPlugin Agent force unloaded"
+    else
+        echo "Impossible"
+    fi
+    printf "Zoom OutlookPlugin Agent process "
+    terminated
+
+else
+
+    printf "Zoom OutlookPlugin Agent process "
+    not_found
+
+fi
+
+echo ""
+echo -e "${BOLD}Deleting Zoom OL Plugin folders...${NORMAL}"
+
+declare -a ZOOM_OUTLOOK_APPLICATION=(
+    "/Applications/ZoomOutlookPlugin"
+    "/Users/$loggedInUser/Applications/ZoomOutlookPlugin"
+)
+
+for ENTRY in "${ZOOM_OUTLOOK_APPLICATION[@]}"; do
+    if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
+        sudo rm -rf "${ENTRY}"
+        printf "%s " "${ENTRY}"
+        deleted
+    else
+        printf "%s " "${ENTRY}"
+        not_found
+    fi
+done
+
+
+echo ""
+echo -e "${BOLD}Cleaning up Zoom OL Plugin cruft...${NORMAL}"
+
+declare -a ZOOM_OUTLOOK_CRUFT=(
+    "/Library/LaunchAgents/us.zoom.pluginagent.plist"
+    "/Library/ScriptingAdditions/zOLPluginInjection.osax"
+    "/Users/Shared/ZoomOutlookPlugin"
+    "/Library/Application Support/Microsoft/ZoomOutlookPlugin"
+    "/Users/$loggedInUser/Library/Logs/zoomoutlookplugin.log"
+
+)
+
+for ENTRY in "${ZOOM_OUTLOOK_CRUFT[@]}"; do
+    if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
+        sudo rm -rf "${ENTRY}"
+        printf "%s " "${ENTRY}"
+        deleted
+    else
+        printf "%s " "${ENTRY}"
+        not_found
+    fi
+
+done
+
+echo ""
+echo -e "${BOLD}Removing pkgutil history for Zoom OL Plugin...${NORMAL}"
+
+if pkgutil --pkgs | grep -Eq "ZoomMacOutlookPlugin.pkg"; then
+
+    sudo pkgutil --forget us.zoom.pkg.videmeeting &> /dev/null
+    printf "pkgutil history for ZoomMacOutlookPlugin.pkg "
+    deleted
+
+else
+
+    printf "pkgutil history for ZoomMacOutlookPlugin.pkg "
+    not_found
+
+fi
