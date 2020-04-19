@@ -108,6 +108,21 @@ else
 
 fi
 
+declare -a ZOOM_AUDIO_DEVICE=(
+    "/Library/Audio/Plug-Ins/HAL/ZoomAudioDevice.driver"
+)
+
+for ENTRY in "${ZOOM_AUDIO_DEVICE[@]}"; do
+    if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
+        sudo rm -rf "${ENTRY}"
+        printf "%s " "${ENTRY}"
+        deleted
+    else
+        printf "%s " "${ENTRY}"
+        not_found
+    fi
+done
+
 # remove the Zoom Plugin
 
 echo ""
@@ -183,6 +198,11 @@ declare -a ZOOM_CRUFT=(
     "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.plist"
     "/Users/$loggedInUser/Library/Saved Application State/us.zoom.xos.savedState"
     "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies"
+    "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.Hotkey.plist"
+    "/Users/$loggedInUser/Library/Preferences/us.zoom.airhost.plist"
+    "/Users/$loggedInUser/Library/Mobile Documents/iCloud~us~zoom~videomeetings"
+    "/Users/$loggedInUser/Library/Application Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings.plist"
+    "/Users/$loggedInUser/Library/Application Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings"
 )
 
 for ENTRY in "${ZOOM_CRUFT[@]}"; do
