@@ -1,6 +1,6 @@
 # remove-zoom-macos
 
-![shellcheck](https://img.shields.io/badge/shellcheck-pass-brightgreen "ShellCheck") ![issues](https://img.shields.io/github/issues/kris-anderson/remove-zoom-macos "Issues") ![script size](https://img.shields.io/github/size/kris-anderson/remove-zoom-macos/remove_zoom_macos.sh "Script Size") ![license type](https://img.shields.io/github/license/kris-anderson/remove-zoom-macos "License Type")
+![CI](https://github.com/kris-anderson/remove-zoom-macos/workflows/CI/badge.svg) ![license type](https://img.shields.io/github/license/kris-anderson/remove-zoom-macos "License Type")
 
 ## Highlights
 
