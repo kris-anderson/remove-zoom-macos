@@ -245,7 +245,7 @@ echo -e "${BOLD}Unloading Zoom OL Plugin LaunchAgent...${NORMAL}"
 # Unload pluginagent LaunchAgent if zOutlookPluginAgent running
 
 if pgrep -i zOutlookPluginAgent >/dev/null; then
-    if [ $(whoami) == root ]; then
+    if [ $(id -un) == root ]; then
         echo -e "I am root"
         su - "$loggedInUser" -c "/bin/launchctl unload -wF /Library/LaunchAgents/us.zoom.pluginagent.plist"
         printf "Zoom OutlookPlugin Agent process "
