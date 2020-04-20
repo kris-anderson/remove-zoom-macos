@@ -245,17 +245,17 @@ echo -e "${BOLD}Unloading Zoom OL Plugin LaunchAgent...${NORMAL}"
 # Unload pluginagent LaunchAgent if zOutlookPluginAgent running
 
 if pgrep -i zOutlookPluginAgent >/dev/null; then
-
-    su - "$loggedInUser" -c "/bin/launchctl unload -w /Library/LaunchAgents/us.zoom.pluginagent.plist"
-    if pgrep -i zOutlookPluginAgent >/dev/null; then
+    if [ $(whoami) == root ]; then
+        echo -e "I am root"
         su - "$loggedInUser" -c "/bin/launchctl unload -wF /Library/LaunchAgents/us.zoom.pluginagent.plist"
-        printf "Zoom OutlookPlugin Agent force unloaded"
+        printf "Zoom OutlookPlugin Agent process "
+        terminated
     else
-        echo "Impossible"
+        echo "I am user"
+        /bin/launchctl unload -wF /Library/LaunchAgents/us.zoom.pluginagent.plist
+        printf "Zoom OutlookPlugin Agent process "
+        terminated
     fi
-    printf "Zoom OutlookPlugin Agent process "
-    terminated
-
 else
 
     printf "Zoom OutlookPlugin Agent process "
@@ -315,7 +315,7 @@ echo -e "${BOLD}Removing pkgutil history for Zoom OL Plugin...${NORMAL}"
 
 if pkgutil --pkgs | grep -Eq "ZoomMacOutlookPlugin.pkg"; then
 
-    sudo pkgutil --forget us.zoom.pkg.videmeeting &> /dev/null
+    sudo pkgutil --forget ZoomMacOutlookPlugin.pkg &> /dev/null
     printf "pkgutil history for ZoomMacOutlookPlugin.pkg "
     deleted
 
