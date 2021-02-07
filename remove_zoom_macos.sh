@@ -54,6 +54,10 @@ header() {
     printf "%s" "${RESET}"
 }
 
+sub_header() {
+    printf "\n%s%s...%s\n" "${BOLD}" "$1" "${RESET}"
+}
+
 not_found() {
     printf "%s%s[not found]%s " "${BOLD}" "${GREEN}" "${RESET}"
 }
@@ -68,23 +72,18 @@ terminated() {
 
 loggedInUser=$(stat -f "%Su" /dev/console)
 
+# prompt the user for their password if required
+printf "\n%sPlease Note:%s This script will prompt for your password if you are not already running as sudo.\n" "${BOLD}" "${RESET}"
+
+sudo -v
+
 ###################
 ### remove zoom ###
 ###################
 
-# prompt the user for their password if required
-
-echo ""
-echo -e "${BOLD}Please Note:${RESET} This script will prompt for your password if you are not already running as sudo."
-
-sudo -v
-
 header "Zoom Desktop Application"
 
-# kill the Zoom process if it's running
-
-echo ""
-echo -e "${BOLD}Checking to see if the Zoom process is running...${RESET}"
+sub_header "Checking to see if the Zoom process is running"
 
 if pgrep -i zoom &>/dev/null; then
 
@@ -99,10 +98,7 @@ else
 
 fi
 
-# remove the Zoom application
-
-echo ""
-echo -e "${BOLD}Removing the Zoom Application...${RESET}"
+sub_header "Removing the Zoom Application"
 
 declare -a ZOOM_APPLICATION=(
     "/Applications/zoom.us.app"
@@ -120,10 +116,7 @@ for ENTRY in "${ZOOM_APPLICATION[@]}"; do
     fi
 done
 
-# unload the Zoom Audio Device and remove the kext file
-
-echo ""
-echo -e "${BOLD}Removing the Zoom Audio Device...${RESET}"
+sub_header "Removing the Zoom Audio Device"
 
 if [ -f "/System/Library/Extensions/ZoomAudioDevice.kext" ] || [ -d "/System/Library/Extensions/ZoomAudioDevice.kext" ]; then
 
@@ -154,10 +147,7 @@ for ENTRY in "${ZOOM_AUDIO_DEVICE[@]}"; do
     fi
 done
 
-# remove the Zoom Plugin
-
-echo ""
-echo -e "${BOLD}Removing Zoom Plugins...${RESET}"
+sub_header "Removing Zoom Plugins"
 
 declare -a ZOOM_PLUGIN=(
     "/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin"
@@ -175,10 +165,7 @@ for ENTRY in "${ZOOM_PLUGIN[@]}"; do
     fi
 done
 
-# remove Zoom defaults
-
-echo ""
-echo -e "${BOLD}Removing Zoom defaults preferences...${RESET}"
+sub_header "Removing Zoom defaults preferences"
 
 if ! sudo defaults read us.zoom.xos 2>&1 | grep -Eq "Domain us.zoom.xos does not exist"; then
 
@@ -193,8 +180,7 @@ else
 
 fi
 
-echo ""
-echo -e "${BOLD}Removing pkgutil history...${RESET}"
+sub_header "Removing pkgutil history"
 
 if pkgutil --pkgs | grep -Eq "us.zoom.pkg.videmeeting"; then
 
@@ -209,10 +195,7 @@ else
 
 fi
 
-# remove extra Zoom cruft
-
-echo ""
-echo -e "${BOLD}Removing extra cruft that Zoom leaves behind...${RESET}"
+sub_header "Removing extra cruft that Zoom leaves behind"
 
 declare -a ZOOM_CRUFT=(
     "/Library/Caches/us.zoom.xos"
@@ -255,8 +238,7 @@ for ENTRY in "${ZOOM_CRUFT[@]}"; do
 
 done
 
-echo ""
-echo -e "${BOLD}Removing package receipts for Zoom...${RESET}"
+sub_header "Removing Zoom package receipts"
 
 declare -a ZOOM_CLIENT_RECEIPTS=(
     "/private/var/db/receipts/us.zoom.pkg.videmeeting.bom"
@@ -281,10 +263,7 @@ done
 
 header "Zoom Outlook Plugin"
 
-echo ""
-echo -e "${BOLD}Killing Zoom Outlook Plugin Launcher if running...${RESET}"
-
-# kill PluginLauncher if running
+sub_header "Killing Zoom Outlook Plugin Launcher if running"
 
 if pgrep -i PluginLauncher &>/dev/null; then
 
@@ -299,10 +278,7 @@ else
 
 fi
 
-echo ""
-echo -e "${BOLD}Unloading Zoom Outlook Plugin LaunchAgent...${RESET}"
-
-# Unload pluginagent LaunchAgent if zOutlookPluginAgent running
+sub_header "Unloading Zoom Outlook Plugin LaunchAgent"
 
 if pgrep -i zOutlookPluginAgent &>/dev/null; then
 
@@ -317,10 +293,7 @@ else
 
 fi
 
-echo ""
-echo -e "${BOLD}Deleting Zoom Outlook Plugin folders...${RESET}"
-
-# delete ZoomOutlook plugin folder
+sub_header "Deleting Zoom Outlook Plugin folders"
 
 declare -a ZOOM_OUTLOOK_APPLICATION=(
     "/Applications/ZoomOutlookPlugin"
@@ -338,9 +311,7 @@ for ENTRY in "${ZOOM_OUTLOOK_APPLICATION[@]}"; do
     fi
 done
 
-echo ""
-echo -e "${BOLD}Cleaning up Zoom Outlook Plugin cruft...${RESET}"
-# cleanup Zoom Outlook plugin cruft
+sub_header "Cleaning up Zoom Outlook Plugin cruft"
 
 declare -a ZOOM_OUTLOOK_CRUFT=(
     "/Library/LaunchAgents/us.zoom.pluginagent.plist"
@@ -359,11 +330,9 @@ for ENTRY in "${ZOOM_OUTLOOK_CRUFT[@]}"; do
         not_found
         printf "%s\n" "${ENTRY}"
     fi
-
 done
 
-echo ""
-echo -e "${BOLD}Removing pkgutil history for Zoom Outlook Plugin...${RESET}"
+sub_header "Removing pkgutil history for Zoom Outlook Plugin"
 
 if pkgutil --pkgs | grep -Eq "ZoomMacOutlookPlugin.pkg"; then
 
@@ -378,8 +347,7 @@ else
 
 fi
 
-echo ""
-echo -e "${BOLD}Removing package receipts for Zoom Outlook Plugin...${RESET}"
+sub_header "Removing package receipts for Zoom Outlook Plugin"
 
 declare -a ZOOM_OUTLOOK_RECEIPTS=(
     "/private/var/db/receipts/ZoomMacOutlookPlugin.pkg.bom"
@@ -395,7 +363,6 @@ for ENTRY in "${ZOOM_OUTLOOK_RECEIPTS[@]}"; do
         not_found
         printf "%s\n" "${ENTRY}"
     fi
-
 done
 
 exit 0
