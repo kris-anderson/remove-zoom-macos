@@ -146,11 +146,11 @@ declare -a ZOOM_AUDIO_DEVICE=(
 for ENTRY in "${ZOOM_AUDIO_DEVICE[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
-        printf "%s " "${ENTRY}"
         deleted
+        printf "%s\n" "${ENTRY}"
     else
-        printf "%s " "${ENTRY}"
         not_found
+        printf "%s\n" "${ENTRY}"
     fi
 done
 
@@ -215,25 +215,32 @@ echo ""
 echo -e "${BOLD}Removing extra cruft that Zoom leaves behind...${RESET}"
 
 declare -a ZOOM_CRUFT=(
-    "/Users/$loggedInUser/.zoomus"
-    "/Users/$loggedInUser/Library/Application Support/zoom.us"
     "/Library/Caches/us.zoom.xos"
-    "/Users/$loggedInUser/Library/Caches/us.zoom.xos"
+    "/Library/Logs/DiagnosticReports/zoom.us*"
     "/Library/Logs/zoom.us"
-    "/Users/$loggedInUser/Library/Logs/zoom.us"
     "/Library/Logs/zoominstall.log"
-    "/Users/$loggedInUser/Library/Logs/zoominstall.log"
-    "/Library/Preferences/ZoomChat.plist"
-    "/Users/$loggedInUser/Library/Preferences/ZoomChat.plist"
     "/Library/Preferences/us.zoom.xos.plist"
-    "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.plist"
-    "/Users/$loggedInUser/Library/Saved Application State/us.zoom.xos.savedState"
-    "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies"
-    "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.Hotkey.plist"
-    "/Users/$loggedInUser/Library/Preferences/us.zoom.airhost.plist"
-    "/Users/$loggedInUser/Library/Mobile Documents/iCloud~us~zoom~videomeetings"
+    "/Library/Preferences/ZoomChat.plist"
+    "/Users/$loggedInUser/.zoomus"
+    "/Users/$loggedInUser/Desktop/Zoom"
+    "/Users/$loggedInUser/Documents/Zoom"
     "/Users/$loggedInUser/Library/Application Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings.plist"
     "/Users/$loggedInUser/Library/Application Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings"
+    "/Users/$loggedInUser/Library/Application Support/CrashReporter/zoom.us*"
+    "/Users/$loggedInUser/Library/Application Support/zoom.us"
+    "/Users/$loggedInUser/Library/Caches/us.zoom.xos"
+    "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies"
+    "/Users/$loggedInUser/Library/Logs/zoom.us"
+    "/Users/$loggedInUser/Library/Logs/zoominstall.log"
+    "/Users/$loggedInUser/Library/Logs/ZoomPhone"
+    "/Users/$loggedInUser/Library/Mobile Documents/iCloud~us~zoom~videomeetings"
+    "/Users/$loggedInUser/Library/Preferences/us.zoom.airhost.plist"
+    "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.Hotkey.plist"
+    "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.plist"
+    "/Users/$loggedInUser/Library/Preferences/ZoomChat.plist"
+    "/Users/$loggedInUser/Library/Safari/PerSiteZoomPreferences.plist"
+    "/Users/$loggedInUser/Library/SafariTechnologyPreview/PerSiteZoomPreferences.plist"
+    "/Users/$loggedInUser/Library/Saved Application State/us.zoom.xos.savedState"
 )
 
 for ENTRY in "${ZOOM_CRUFT[@]}"; do
