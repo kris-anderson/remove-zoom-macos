@@ -213,6 +213,7 @@ declare -a ZOOM_CRUFT=(
     "/Users/$loggedInUser/Library/Application Support/zoom.us"
     "/Users/$loggedInUser/Library/Caches/us.zoom.xos"
     "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies"
+    "/Users/$loggedInUser/Library/HTTPStorages/us.zoom.xos"
     "/Users/$loggedInUser/Library/Logs/zoom.us"
     "/Users/$loggedInUser/Library/Logs/zoominstall.log"
     "/Users/$loggedInUser/Library/Logs/ZoomPhone"
