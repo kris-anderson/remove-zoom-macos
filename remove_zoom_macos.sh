@@ -85,9 +85,9 @@ header "Zoom Desktop Application"
 
 sub_header "Checking to see if the Zoom process is running"
 
-if pgrep -i zoom &>/dev/null; then
+if pgrep -i "zoom.us" &>/dev/null; then
 
-    sudo kill "$(pgrep -i zoom)"
+    sudo kill "$(pgrep -i zoom.us)"
     terminated
     printf "Zoom process\n"
 
@@ -198,12 +198,16 @@ fi
 sub_header "Removing extra cruft that Zoom leaves behind"
 
 declare -a ZOOM_CRUFT=(
+    "/Library/Application Support/zoom.us/"
     "/Library/Caches/us.zoom.xos"
+    "/Library/LaunchDaemons/us.zoom.ZoomDaemon.plist"
     "/Library/Logs/DiagnosticReports/zoom.us*"
     "/Library/Logs/zoom.us"
     "/Library/Logs/zoominstall.log"
+    "/Library/Logs/zoomusinstall.log"
     "/Library/Preferences/us.zoom.xos.plist"
     "/Library/Preferences/ZoomChat.plist"
+    "/Library/PrivilegedHelperTools/us.zoom.ZoomDaemon"
     "/Users/$loggedInUser/.zoomus"
     "/Users/$loggedInUser/Desktop/Zoom"
     "/Users/$loggedInUser/Documents/Zoom"
@@ -213,6 +217,7 @@ declare -a ZOOM_CRUFT=(
     "/Users/$loggedInUser/Library/Application Support/zoom.us"
     "/Users/$loggedInUser/Library/Caches/us.zoom.xos"
     "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies"
+    "/Users/$loggedInUser/Library/HTTPStorages/us.zoom.xos.binarycookies"
     "/Users/$loggedInUser/Library/HTTPStorages/us.zoom.xos"
     "/Users/$loggedInUser/Library/Logs/zoom.us"
     "/Users/$loggedInUser/Library/Logs/zoominstall.log"
@@ -221,10 +226,12 @@ declare -a ZOOM_CRUFT=(
     "/Users/$loggedInUser/Library/Preferences/us.zoom.airhost.plist"
     "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.Hotkey.plist"
     "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.plist"
+    "/Users/$loggedInUser/Library/Preferences/us.zoom.ZoomAutoUpdater.plist"
     "/Users/$loggedInUser/Library/Preferences/ZoomChat.plist"
     "/Users/$loggedInUser/Library/Safari/PerSiteZoomPreferences.plist"
     "/Users/$loggedInUser/Library/SafariTechnologyPreview/PerSiteZoomPreferences.plist"
     "/Users/$loggedInUser/Library/Saved Application State/us.zoom.xos.savedState"
+    "/Users/$loggedInUser/Library/WebKit/us.zoom.xos"
 )
 
 for ENTRY in "${ZOOM_CRUFT[@]}"; do
@@ -244,6 +251,8 @@ sub_header "Removing Zoom package receipts"
 declare -a ZOOM_CLIENT_RECEIPTS=(
     "/private/var/db/receipts/us.zoom.pkg.videmeeting.bom"
     "/private/var/db/receipts/us.zoom.pkg.videmeeting.plist"
+    "/private/var/db/receipts/us.zoom.pkg.videomeeting.bom"
+    "/private/var/db/receipts/us.zoom.pkg.videomeeting.plist"
 )
 
 for ENTRY in "${ZOOM_CLIENT_RECEIPTS[@]}"; do
