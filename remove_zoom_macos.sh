@@ -70,6 +70,10 @@ terminated() {
     printf "%s%s[terminated]%s " "${BOLD}" "${RED}" "${RESET}"
 }
 
+###################
+### prompt user ###
+###################
+
 loggedInUser=$(stat -f "%Su" /dev/console)
 
 # prompt the user for their password if required
@@ -77,9 +81,9 @@ printf "\n%sPlease Note:%s This script will prompt for your password if you are 
 
 sudo -v
 
-###################
-### remove zoom ###
-###################
+####################
+### kill process ###
+####################
 
 header "Zoom Desktop Application"
 
@@ -94,36 +98,44 @@ if pgrep -i "zoom.us" &>/dev/null; then
 else
 
     not_found
-    printf "Zoom process\n"
+    printf " Zoom process\n"
 
 fi
+
+##########################
+### remove application ###
+##########################
 
 sub_header "Removing the Zoom Application"
 
 declare -a ZOOM_APPLICATION=(
-    "/Applications/zoom.us.app"
-    "/Users/$loggedInUser/Applications/zoom.us.app"
+    /Applications/zoom.us.app
+    /Users/"$loggedInUser"/Applications/zoom.us.app
 )
 
 for ENTRY in "${ZOOM_APPLICATION[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         deleted
-        printf "%s\n" "${ENTRY}"
+        printf "  %s\n" "${ENTRY}"
     else
         not_found
         printf "%s\n" "${ENTRY}"
     fi
 done
 
-sub_header "Removing the Zoom Audio Device"
+############################
+### remove audio devices ###
+############################
+
+sub_header "Removing the Zoom Audio Devices"
 
 if [ -f "/System/Library/Extensions/ZoomAudioDevice.kext" ] || [ -d "/System/Library/Extensions/ZoomAudioDevice.kext" ]; then
 
     sudo kextunload -b zoom.us.ZoomAudioDevice
     sudo rm -rf "/System/Library/Extensions/ZoomAudioDevice.kext"
     deleted
-    printf "/System/Library/Extensions/ZoomAudioDevice.kext file\n"
+    printf "  /System/Library/Extensions/ZoomAudioDevice.kext file\n"
 
 else
 
@@ -133,37 +145,45 @@ else
 fi
 
 declare -a ZOOM_AUDIO_DEVICE=(
-    "/Library/Audio/Plug-Ins/HAL/ZoomAudioDevice.driver"
+    /Library/Audio/Plug-Ins/HAL/ZoomAudioDevice.driver
 )
 
 for ENTRY in "${ZOOM_AUDIO_DEVICE[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         deleted
-        printf "%s\n" "${ENTRY}"
+        printf "  %s\n" "${ENTRY}"
     else
         not_found
         printf "%s\n" "${ENTRY}"
     fi
 done
 
+######################
+### remove plugins ###
+######################
+
 sub_header "Removing Zoom Plugins"
 
 declare -a ZOOM_PLUGIN=(
-    "/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin"
-    "/Users/$loggedInUser/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin"
+    /Library/Internet\ Plug-Ins/ZoomUsPlugIn.plugin
+    /Users/"$loggedInUser"/Library/Internet\ Plug-Ins/ZoomUsPlugIn.plugin
 )
 
 for ENTRY in "${ZOOM_PLUGIN[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         deleted
-        printf "%s\n" "${ENTRY}"
+        printf "  %s\n" "${ENTRY}"
     else
         not_found
         printf "%s\n" "${ENTRY}"
     fi
 done
+
+###################################
+### remove defaults preferences ###
+###################################
 
 sub_header "Removing Zoom defaults preferences"
 
@@ -171,7 +191,7 @@ if ! sudo defaults read us.zoom.xos 2>&1 | grep -Eq "Domain us.zoom.xos does not
 
     sudo defaults delete us.zoom.xos
     deleted
-    printf "sudo defaults read us.zoom.xos\n"
+    printf "  sudo defaults read us.zoom.xos\n"
 
 else
 
@@ -179,6 +199,10 @@ else
     printf "sudo defaults read us.zoom.xos\n"
 
 fi
+
+##############################
+### remove pkgutil history ###
+##############################
 
 sub_header "Removing pkgutil history"
 
@@ -186,7 +210,7 @@ if pkgutil --pkgs | grep -Eq "us.zoom.pkg.videmeeting"; then
 
     sudo pkgutil --forget us.zoom.pkg.videmeeting &>/dev/null
     deleted
-    printf "pkgutil history for us.zoom.pkg.videmeeting\n"
+    printf "  pkgutil history for us.zoom.pkg.videmeeting\n"
 
 else
 
@@ -195,50 +219,58 @@ else
 
 fi
 
+##########################
+### remove extra cruft ###
+##########################
+
 sub_header "Removing extra cruft that Zoom leaves behind"
 
 declare -a ZOOM_CRUFT=(
-    "/Library/Application Support/zoom.us/"
-    "/Library/Caches/us.zoom.xos"
-    "/Library/LaunchDaemons/us.zoom.ZoomDaemon.plist"
-    "/Library/Logs/DiagnosticReports/zoom.us*"
-    "/Library/Logs/zoom.us"
-    "/Library/Logs/zoominstall.log"
-    "/Library/Logs/zoomusinstall.log"
-    "/Library/Preferences/us.zoom.xos.plist"
-    "/Library/Preferences/ZoomChat.plist"
-    "/Library/PrivilegedHelperTools/us.zoom.ZoomDaemon"
-    "/Users/$loggedInUser/.zoomus"
-    "/Users/$loggedInUser/Desktop/Zoom"
-    "/Users/$loggedInUser/Documents/Zoom"
-    "/Users/$loggedInUser/Library/Application Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings.plist"
-    "/Users/$loggedInUser/Library/Application Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings"
-    "/Users/$loggedInUser/Library/Application Support/CrashReporter/zoom.us*"
-    "/Users/$loggedInUser/Library/Application Support/zoom.us"
-    "/Users/$loggedInUser/Library/Caches/us.zoom.xos"
-    "/Users/$loggedInUser/Library/Cookies/us.zoom.xos.binarycookies"
-    "/Users/$loggedInUser/Library/HTTPStorages/us.zoom.xos.binarycookies"
-    "/Users/$loggedInUser/Library/HTTPStorages/us.zoom.xos"
-    "/Users/$loggedInUser/Library/Logs/zoom.us"
-    "/Users/$loggedInUser/Library/Logs/zoominstall.log"
-    "/Users/$loggedInUser/Library/Logs/ZoomPhone"
-    "/Users/$loggedInUser/Library/Mobile Documents/iCloud~us~zoom~videomeetings"
-    "/Users/$loggedInUser/Library/Preferences/us.zoom.airhost.plist"
-    "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.Hotkey.plist"
-    "/Users/$loggedInUser/Library/Preferences/us.zoom.xos.plist"
-    "/Users/$loggedInUser/Library/Preferences/us.zoom.ZoomAutoUpdater.plist"
-    "/Users/$loggedInUser/Library/Preferences/ZoomChat.plist"
-    "/Users/$loggedInUser/Library/Safari/PerSiteZoomPreferences.plist"
-    "/Users/$loggedInUser/Library/SafariTechnologyPreview/PerSiteZoomPreferences.plist"
-    "/Users/$loggedInUser/Library/Saved Application State/us.zoom.xos.savedState"
-    "/Users/$loggedInUser/Library/WebKit/us.zoom.xos"
+    /Library/Application\ Support/zoom.us/
+    /Library/Caches/us.zoom.xos
+    /Library/LaunchDaemons/us.zoom.ZoomDaemon.plist
+    /Library/Logs/DiagnosticReports/zoom.us*
+    /Library/Logs/zoom.us
+    /Library/Logs/zoominstall.log
+    /Library/Logs/zoomusinstall.log
+    /Library/Preferences/us.zoom.xos.plist
+    /Library/Preferences/ZoomChat.plist
+    /Library/PrivilegedHelperTools/us.zoom.ZoomDaemon
+    /Users/"$loggedInUser"/.zoomus
+    /Users/"$loggedInUser"/Desktop/Zoom
+    /Users/"$loggedInUser"/Documents/Zoom
+    /Users/"$loggedInUser"/Library/Application\ Scripts/*.ZoomClient3rd
+    /Users/"$loggedInUser"/Library/Application\ Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings
+    /Users/"$loggedInUser"/Library/Application\ Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings.plist
+    /Users/"$loggedInUser"/Library/Application\ Support/CrashReporter/zoom.us*
+    /Users/"$loggedInUser"/Library/Application\ Support/zoom.us
+    /Users/"$loggedInUser"/Library/Caches/us.zoom.xos
+    /Users/"$loggedInUser"/Library/Cookies/us.zoom.xos.binarycookies
+    /Users/"$loggedInUser"/Library/Group\ Containers/*.ZoomClient3rd
+    /Users/"$loggedInUser"/Library/HTTPStorages/us.zoom.xos
+    /Users/"$loggedInUser"/Library/HTTPStorages/us.zoom.xos.binarycookies
+    /Users/"$loggedInUser"/Library/Logs/zoom.us
+    /Users/"$loggedInUser"/Library/Logs/zoominstall.log
+    /Users/"$loggedInUser"/Library/Logs/ZoomPhone
+    /Users/"$loggedInUser"/Library/Mobile\ Documents/iCloud~us~zoom~videomeetings
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.airhost.plist
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.caphost.plist
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.Transcode.plist
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.xos.Hotkey.plist
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.xos.plist
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.ZoomAutoUpdater.plist
+    /Users/"$loggedInUser"/Library/Preferences/ZoomChat.plist
+    /Users/"$loggedInUser"/Library/Safari/PerSiteZoomPreferences.plist
+    /Users/"$loggedInUser"/Library/SafariTechnologyPreview/PerSiteZoomPreferences.plist
+    /Users/"$loggedInUser"/Library/Saved\ Application\ State/us.zoom.xos.savedState
+    /Users/"$loggedInUser"/Library/WebKit/us.zoom.xos
 )
 
 for ENTRY in "${ZOOM_CRUFT[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         deleted
-        printf "%s\n" "${ENTRY}"
+        printf "  %s\n" "${ENTRY}"
     else
         not_found
         printf "%s\n" "${ENTRY}"
@@ -246,20 +278,24 @@ for ENTRY in "${ZOOM_CRUFT[@]}"; do
 
 done
 
+###############################
+### remove package receipts ###
+###############################
+
 sub_header "Removing Zoom package receipts"
 
 declare -a ZOOM_CLIENT_RECEIPTS=(
-    "/private/var/db/receipts/us.zoom.pkg.videmeeting.bom"
-    "/private/var/db/receipts/us.zoom.pkg.videmeeting.plist"
-    "/private/var/db/receipts/us.zoom.pkg.videomeeting.bom"
-    "/private/var/db/receipts/us.zoom.pkg.videomeeting.plist"
+    /private/var/db/receipts/us.zoom.pkg.videmeeting.bom
+    /private/var/db/receipts/us.zoom.pkg.videmeeting.plist
+    /private/var/db/receipts/us.zoom.pkg.videomeeting.bom
+    /private/var/db/receipts/us.zoom.pkg.videomeeting.plist
 )
 
 for ENTRY in "${ZOOM_CLIENT_RECEIPTS[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         deleted
-        printf "%s\n" "${ENTRY}"
+        printf "  %s\n" "${ENTRY}"
     else
         not_found
         printf "%s\n" "${ENTRY}"
@@ -267,11 +303,15 @@ for ENTRY in "${ZOOM_CLIENT_RECEIPTS[@]}"; do
 
 done
 
-#############################
-### remove outlook plugin ###
-#############################
+######################
+### outlook plugin ###
+######################
 
 header "Zoom Outlook Plugin"
+
+###################################
+### kill outlook plugin process ###
+###################################
 
 sub_header "Killing Zoom Outlook Plugin Launcher if running"
 
@@ -284,9 +324,13 @@ if pgrep -i PluginLauncher &>/dev/null; then
 else
 
     not_found
-    printf "Zoom PluginLauncher process\n"
+    printf " Zoom PluginLauncher process\n"
 
 fi
+
+##########################################
+### unload outlook plugin launch agent ###
+##########################################
 
 sub_header "Unloading Zoom Outlook Plugin LaunchAgent"
 
@@ -299,48 +343,60 @@ if pgrep -i zOutlookPluginAgent &>/dev/null; then
 else
 
     not_found
-    printf "Zoom OutlookPlugin Agent process\n"
+    printf " Zoom OutlookPlugin Agent process\n"
 
 fi
+
+#####################################
+### remove outlook plugin folders ###
+#####################################
 
 sub_header "Deleting Zoom Outlook Plugin folders"
 
 declare -a ZOOM_OUTLOOK_APPLICATION=(
-    "/Applications/ZoomOutlookPlugin"
-    "/Users/$loggedInUser/Applications/ZoomOutlookPlugin"
+    /Applications/ZoomOutlookPlugin
+    /Users/"$loggedInUser"/Applications/ZoomOutlookPlugin
 )
 
 for ENTRY in "${ZOOM_OUTLOOK_APPLICATION[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         deleted
-        printf "%s\n" "${ENTRY}"
+        printf "%s\n" "  ${ENTRY}"
     else
         not_found
         printf "%s\n" "${ENTRY}"
     fi
 done
 
+###################################
+### remove outlook plugin cruft ###
+###################################
+
 sub_header "Cleaning up Zoom Outlook Plugin cruft"
 
 declare -a ZOOM_OUTLOOK_CRUFT=(
-    "/Library/LaunchAgents/us.zoom.pluginagent.plist"
-    "/Library/ScriptingAdditions/zOLPluginInjection.osax"
-    "/Users/Shared/ZoomOutlookPlugin"
-    "/Library/Application Support/Microsoft/ZoomOutlookPlugin"
-    "/Users/$loggedInUser/Library/Logs/zoomoutlookplugin.log"
+    /Library/Application\ Support/Microsoft/ZoomOutlookPlugin
+    /Library/LaunchAgents/us.zoom.pluginagent.plist
+    /Library/ScriptingAdditions/zOLPluginInjection.osax
+    /Users/"$loggedInUser"/Library/Logs/zoomoutlookplugin.log
+    /Users/Shared/ZoomOutlookPlugin
 )
 
 for ENTRY in "${ZOOM_OUTLOOK_CRUFT[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         deleted
-        printf "%s\n" "${ENTRY}"
+        printf "  %s\n" "${ENTRY}"
     else
         not_found
         printf "%s\n" "${ENTRY}"
     fi
 done
+
+#############################################
+### remove outlook plugin pkgutil history ###
+#############################################
 
 sub_header "Removing pkgutil history for Zoom Outlook Plugin"
 
@@ -348,7 +404,7 @@ if pkgutil --pkgs | grep -Eq "ZoomMacOutlookPlugin.pkg"; then
 
     sudo pkgutil --forget ZoomMacOutlookPlugin.pkg &>/dev/null
     deleted
-    printf "pkgutil history for ZoomMacOutlookPlugin.pkg\n"
+    printf "  pkgutil history for ZoomMacOutlookPlugin.pkg\n"
 
 else
 
@@ -357,18 +413,22 @@ else
 
 fi
 
+##############################################
+### remove outlook plugin package receipts ###
+##############################################
+
 sub_header "Removing package receipts for Zoom Outlook Plugin"
 
 declare -a ZOOM_OUTLOOK_RECEIPTS=(
-    "/private/var/db/receipts/ZoomMacOutlookPlugin.pkg.bom"
-    "/private/var/db/receipts/ZoomMacOutlookPlugin.pkg.plist"
+    /private/var/db/receipts/ZoomMacOutlookPlugin.pkg.bom
+    /private/var/db/receipts/ZoomMacOutlookPlugin.pkg.plist
 )
 
 for ENTRY in "${ZOOM_OUTLOOK_RECEIPTS[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
         deleted
-        printf "%s\n" "${ENTRY}"
+        printf "  %s\n" "${ENTRY}"
     else
         not_found
         printf "%s\n" "${ENTRY}"
