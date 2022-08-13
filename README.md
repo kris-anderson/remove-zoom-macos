@@ -55,6 +55,8 @@ In 2019 Zoom installed a web server on macOS computers when you installed Zoom, 
 
 In 2020 two more vulnerabilities appeared, also due to Zoom making things easier for users at the expense of security. One of them allowed any person with access to the computer (or a piece of malware on the computer) to become the root user without a password. The other vulnerability allows for other applications on your mac to use code injection in order to piggyback on the permissions you granted to Zoom previously, allowing for those malicious applications to enable your camera and microphone without your permission. Source: [The 'S' in Zoom, Stands for Security](https://objective-see.com/blog/blog_0x56.html)
 
+In 2022 a security researcher found a way that an attacker could leverage the macOS version of Zoom to gain access over the entire operating system. Source: [The Zoom installer let a researcher hack his way to root access on macOS](https://www.theverge.com/2022/8/12/23303411/zoom-defcon-root-access-privilege-escalation-hack-patrick-wardle)
+
 Because of how Zoom develops their software, some people do not trust them, and would prefer not to run their software. I am one of those people, and this script was created for to aid in the complete removal of everything Zoom installs.
 
 ## Why use this instead of the Zoom uninstaller
