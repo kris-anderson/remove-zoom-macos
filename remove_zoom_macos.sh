@@ -236,6 +236,9 @@ declare -a ZOOM_CRUFT=(
     /Library/Preferences/us.zoom.xos.plist
     /Library/Preferences/ZoomChat.plist
     /Library/PrivilegedHelperTools/us.zoom.ZoomDaemon
+    /private/var/folders/*/*/*/us.zoom.caphost
+    /private/var/folders/*/*/*/us.zoom.xos
+    /private/var/folders/*/*/*/us.zoom.ZoomAutoUpdater
     /Users/"$loggedInUser"/.zoomus
     /Users/"$loggedInUser"/Desktop/Zoom
     /Users/"$loggedInUser"/Documents/Zoom
@@ -289,6 +292,8 @@ declare -a ZOOM_CLIENT_RECEIPTS=(
     /private/var/db/receipts/us.zoom.pkg.videmeeting.plist
     /private/var/db/receipts/us.zoom.pkg.videomeeting.bom
     /private/var/db/receipts/us.zoom.pkg.videomeeting.plist
+    /private/var/db/receipts/us.zoom.xos.bom
+    /private/var/db/receipts/us.zoom.xos.plist
 )
 
 for ENTRY in "${ZOOM_CLIENT_RECEIPTS[@]}"; do
