@@ -25,7 +25,7 @@
 
 ### Easy Method
 
-1. Run this single command.
+1. Open your terminal and run this single command
 
    ```shell
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/kris-anderson/remove-zoom-macos/master/remove_zoom_macos.sh)"
@@ -33,19 +33,21 @@
 
 ### Manual Method
 
-1. Open your terminal and download the `remove_zoom_macos.sh` script.
+1. Open your terminal
+
+2. Download the `remove_zoom_macos.sh` script
 
    ```shell
    wget https://raw.githubusercontent.com/kris-anderson/remove-zoom-macos/master/remove_zoom_macos.sh
    ```
 
-2. Add execute permissions to the script.
+3. Add execute permissions to the script
 
     ```shell
     chmod +x remove_zoom_macos.sh
     ```
 
-3. Run it.
+4. Run the script
 
     ```shell
     ./remove_zoom_macos.sh
@@ -53,7 +55,9 @@
 
 ## Example Terminal Output
 
-![terminal command screenshot](https://remove-zoom-macos.s3-us-west-2.amazonaws.com/images/terminal_screenshot_light.jpg)
+![remove zoom macos command screenshot 1](https://remove-zoom-macos.s3-us-west-2.amazonaws.com/images/remove_zoom_macos_terminal_output_1.jpg)
+
+![remove zoom macos command screenshot 2](https://remove-zoom-macos.s3-us-west-2.amazonaws.com/images/remove_zoom_macos_terminal_output_2.jpg)
 
 ## Why this script exists
 
