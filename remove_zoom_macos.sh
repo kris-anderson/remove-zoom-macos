@@ -233,10 +233,14 @@ declare -a ZOOM_CRUFT=(
     /Library/Logs/zoom.us
     /Library/Logs/zoominstall.log
     /Library/Logs/zoomusinstall.log
+    /Library/Managed\ Preferences/"$loggedInUser"/us.zoom.config.plist
+    /Library/Managed\ Preferences/us.zoom.config.plist
     /Library/Preferences/us.zoom.xos.plist
     /Library/Preferences/ZoomChat.plist
     /Library/PrivilegedHelperTools/us.zoom.ZoomDaemon
+    /private/var/folders/*/*/*/us.zoom.aomhost
     /private/var/folders/*/*/*/us.zoom.caphost
+    /private/var/folders/*/*/*/us.zoom.CptHost
     /private/var/folders/*/*/*/us.zoom.xos
     /private/var/folders/*/*/*/us.zoom.ZoomAutoUpdater
     /Users/"$loggedInUser"/.zoomus
