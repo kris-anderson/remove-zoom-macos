@@ -234,7 +234,9 @@ declare -a ZOOM_CRUFT=(
     /Library/Logs/zoominstall.log
     /Library/Logs/zoomusinstall.log
     /Library/Managed\ Preferences/"$loggedInUser"/us.zoom.config.plist
+    /Library/Managed\ Preferences/"$loggedInUser"/us.zoom.xos.AppInstaller.plist
     /Library/Managed\ Preferences/us.zoom.config.plist
+    /Library/Managed\ Preferences/us.zoom.xos.AppInstaller.plist
     /Library/Preferences/us.zoom.xos.plist
     /Library/Preferences/ZoomChat.plist
     /Library/PrivilegedHelperTools/us.zoom.ZoomDaemon
@@ -267,6 +269,8 @@ declare -a ZOOM_CRUFT=(
     /Users/"$loggedInUser"/Library/Preferences/us.zoom.xos.plist
     /Users/"$loggedInUser"/Library/Preferences/us.zoom.ZoomAutoUpdater.plist
     /Users/"$loggedInUser"/Library/Preferences/ZoomChat.plist
+    /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.bom
+    /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.plist
     /Users/"$loggedInUser"/Library/Safari/PerSiteZoomPreferences.plist
     /Users/"$loggedInUser"/Library/SafariTechnologyPreview/PerSiteZoomPreferences.plist
     /Users/"$loggedInUser"/Library/Saved\ Application\ State/us.zoom.xos.savedState
