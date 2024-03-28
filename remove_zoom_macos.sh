@@ -271,8 +271,6 @@ declare -a ZOOM_CRUFT=(
     /Users/"$loggedInUser"/Library/Preferences/ZoomChat.plist
     /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.bom
     /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.plist
-    /Users/"$loggedInUser"/Library/Safari/PerSiteZoomPreferences.plist
-    /Users/"$loggedInUser"/Library/SafariTechnologyPreview/PerSiteZoomPreferences.plist
     /Users/"$loggedInUser"/Library/Saved\ Application\ State/us.zoom.xos.savedState
     /Users/"$loggedInUser"/Library/WebKit/us.zoom.xos
 )
