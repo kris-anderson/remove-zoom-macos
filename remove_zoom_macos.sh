@@ -277,9 +277,6 @@ declare -a ZOOM_CRUFT=(
     /Users/"$loggedInUser"/Library/WebKit/us.zoom.xos
 )
 
-/Users/kris/Library/Preferences/us.zoom.updater.config.plist
-/Users/kris/Library/Preferences/us.zoom.ZoomClips.plist
-
 for ENTRY in "${ZOOM_CRUFT[@]}"; do
     if [ -f "${ENTRY}" ] || [ -d "${ENTRY}" ]; then
         sudo rm -rf "${ENTRY}"
