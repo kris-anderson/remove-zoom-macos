@@ -265,9 +265,11 @@ declare -a ZOOM_CRUFT=(
     /Users/"$loggedInUser"/Library/Preferences/us.zoom.airhost.plist
     /Users/"$loggedInUser"/Library/Preferences/us.zoom.caphost.plist
     /Users/"$loggedInUser"/Library/Preferences/us.zoom.Transcode.plist
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.updater.config.plist
     /Users/"$loggedInUser"/Library/Preferences/us.zoom.xos.Hotkey.plist
     /Users/"$loggedInUser"/Library/Preferences/us.zoom.xos.plist
     /Users/"$loggedInUser"/Library/Preferences/us.zoom.ZoomAutoUpdater.plist
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.ZoomClips.plist
     /Users/"$loggedInUser"/Library/Preferences/ZoomChat.plist
     /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.bom
     /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.plist
