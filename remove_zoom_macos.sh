@@ -258,6 +258,8 @@ declare -a ZOOM_CRUFT=(
     /Users/"$loggedInUser"/Library/Group\ Containers/*.ZoomClient3rd
     /Users/"$loggedInUser"/Library/HTTPStorages/us.zoom.xos
     /Users/"$loggedInUser"/Library/HTTPStorages/us.zoom.xos.binarycookies
+    /Users/"$loggedInUser"/Library/LaunchAgents/us.zoom.updater.gui.*.plist
+    /Users/"$loggedInUser"/Library/LaunchAgents/us.zoom.updater.gui.*.login.check.plist
     /Users/"$loggedInUser"/Library/Logs/zoom.us
     /Users/"$loggedInUser"/Library/Logs/zoominstall.log
     /Users/"$loggedInUser"/Library/Logs/ZoomPhone
