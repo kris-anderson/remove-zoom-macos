@@ -14,6 +14,7 @@
 * Removes the Zoom application from the `/Applications/` or `~/Applications/` directories
 * Uninstalls the Zoom Audio Device
 * Removes the Zoom Internet Plugin
+* Removes Zoom's updater and helper tools, and their launch agents and daemons
 * Removes a defaults value
 * Removes the pkgutil history for Zoom
 * Removes the `~/.zoomus/` directory from your home directory
