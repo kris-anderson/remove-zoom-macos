@@ -207,18 +207,23 @@ fi
 
 sub_header "Removing pkgutil history"
 
-if pkgutil --pkgs | grep -Eq "us.zoom.pkg.videmeeting"; then
+# Zoom has shipped both spellings: 4.6.18176.0301 used videomeeting,
+# 4.6.19273.0402 used videmeeting, and current releases use videomeeting
+declare -a ZOOM_PKG_IDS=(
+    us.zoom.pkg.videmeeting
+    us.zoom.pkg.videomeeting
+)
 
-    sudo pkgutil --forget us.zoom.pkg.videmeeting &>/dev/null
-    deleted
-    printf "  pkgutil history for us.zoom.pkg.videmeeting\n"
-
-else
-
-    not_found
-    printf "pkgutil history for us.zoom.pkg.videmeeting\n"
-
-fi
+for PKG_ID in "${ZOOM_PKG_IDS[@]}"; do
+    if pkgutil --pkg-info "${PKG_ID}" &>/dev/null; then
+        sudo pkgutil --forget "${PKG_ID}" &>/dev/null
+        deleted
+        printf "  pkgutil history for %s\n" "${PKG_ID}"
+    else
+        not_found
+        printf "pkgutil history for %s\n" "${PKG_ID}"
+    fi
+done
 
 ##########################
 ### remove extra cruft ###
@@ -297,6 +302,8 @@ declare -a ZOOM_CRUFT=(
     /Users/"$loggedInUser"/Library/Preferences/ZoomChineseChat.plist
     /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.bom
     /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.plist
+    /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videmeeting.bom
+    /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videmeeting.plist
     /Users/"$loggedInUser"/Library/Saved\ Application\ State/us.zoom.xos.savedState
     /Users/"$loggedInUser"/Library/WebKit/us.zoom.xos
     /Users/"$loggedInUser"/Library/WebKit/us.zoom.ZoomMeeting
