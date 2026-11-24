@@ -75,6 +75,7 @@ terminated() {
 ###################
 
 loggedInUser=$(stat -f "%Su" /dev/console)
+loggedInUserID=$(id -u "$loggedInUser")
 
 # prompt the user for their password if required
 printf "\n%sPlease Note:%s This script will prompt for your password if you are not already running as sudo.\n" "${BOLD}" "${RESET}"
@@ -187,16 +188,26 @@ done
 
 sub_header "Removing Zoom defaults preferences"
 
-if ! sudo defaults read us.zoom.xos 2>&1 | grep -Eq "Domain us.zoom.xos does not exist"; then
+# run defaults as the logged-in user, inside their session, so it reaches their
+# preferences (and the cfprefsd that caches them) even when this script runs as root
+user_defaults() {
+    sudo launchctl asuser "$loggedInUserID" sudo -u "$loggedInUser" defaults "$@"
+}
 
-    sudo defaults delete us.zoom.xos
-    deleted
-    printf "  sudo defaults read us.zoom.xos\n"
+ZOOM_DEFAULTS_DOMAINS=$(user_defaults domains 2>/dev/null | tr ',' '\n' | sed 's/^ *//' | grep -E '^(us\.zoom\..*|ZoomChat)$')
+
+if [ -n "${ZOOM_DEFAULTS_DOMAINS}" ]; then
+
+    while IFS= read -r DOMAIN; do
+        user_defaults delete "${DOMAIN}" &>/dev/null
+        deleted
+        printf "  defaults domain %s\n" "${DOMAIN}"
+    done <<<"${ZOOM_DEFAULTS_DOMAINS}"
 
 else
 
     not_found
-    printf "sudo defaults read us.zoom.xos\n"
+    printf "defaults domains us.zoom.* and ZoomChat\n"
 
 fi
 
