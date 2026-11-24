@@ -146,6 +146,7 @@ fi
 
 declare -a ZOOM_AUDIO_DEVICE=(
     /Library/Audio/Plug-Ins/HAL/ZoomAudioDevice.driver
+    /Library/Extensions/ZoomAudioDevice.kext
 )
 
 for ENTRY in "${ZOOM_AUDIO_DEVICE[@]}"; do
@@ -226,57 +227,79 @@ fi
 sub_header "Removing extra cruft that Zoom leaves behind"
 
 declare -a ZOOM_CRUFT=(
+    /Applications/.zoomusUpdateUseOnly
     /Library/Application\ Support/zoom.us/
     /Library/Caches/us.zoom.xos
+    /Library/LaunchAgents/us.zoom.updater.delay.plist
+    /Library/LaunchAgents/us.zoom.updater.login.check.plist
+    /Library/LaunchAgents/us.zoom.updater.plist
+    /Library/LaunchDaemons/us.zoom.updater.install.plist
+    /Library/LaunchDaemons/us.zoom.ZMSipLocationHelper.plist
     /Library/LaunchDaemons/us.zoom.ZoomDaemon.plist
     /Library/Logs/DiagnosticReports/zoom.us*
+    /Library/Logs/LocationInstall.log
+    /Library/Logs/us.zoom.ZMSipLocationHelper
     /Library/Logs/zoom.us
+    /Library/Logs/ZoomDaemon
     /Library/Logs/zoominstall.log
+    /Library/Logs/ZoomUpdater
     /Library/Logs/zoomusinstall.log
     /Library/Managed\ Preferences/"$loggedInUser"/us.zoom.config.plist
     /Library/Managed\ Preferences/"$loggedInUser"/us.zoom.xos.AppInstaller.plist
     /Library/Managed\ Preferences/us.zoom.config.plist
     /Library/Managed\ Preferences/us.zoom.xos.AppInstaller.plist
+    /Library/Preferences/us.zoom.config.plist
     /Library/Preferences/us.zoom.xos.plist
     /Library/Preferences/ZoomChat.plist
+    /Library/PrivilegedHelperTools/us.zoom.ZMSipLocationHelper
     /Library/PrivilegedHelperTools/us.zoom.ZoomDaemon
     /private/var/folders/*/*/*/us.zoom.aomhost
     /private/var/folders/*/*/*/us.zoom.caphost
     /private/var/folders/*/*/*/us.zoom.CptHost
+    /private/var/folders/*/*/*/us.zoom.updater
     /private/var/folders/*/*/*/us.zoom.xos
     /private/var/folders/*/*/*/us.zoom.ZoomAutoUpdater
+    /private/var/folders/*/*/*/us.zoom.ZoomClips
     /Users/"$loggedInUser"/.zoomus
     /Users/"$loggedInUser"/Desktop/Zoom
     /Users/"$loggedInUser"/Documents/Zoom
     /Users/"$loggedInUser"/Library/Application\ Scripts/*.ZoomClient3rd
     /Users/"$loggedInUser"/Library/Application\ Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings
     /Users/"$loggedInUser"/Library/Application\ Support/CloudDocs/session/containers/iCloud.us.zoom.videomeetings.plist
+    /Users/"$loggedInUser"/Library/Application\ Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/us.zoom*.sfl*
+    /Users/"$loggedInUser"/Library/Application\ Support/com.zoom.screenshot
     /Users/"$loggedInUser"/Library/Application\ Support/CrashReporter/zoom.us*
+    /Users/"$loggedInUser"/Library/Application\ Support/zCCIMeetingHost
     /Users/"$loggedInUser"/Library/Application\ Support/zoom.us
+    /Users/"$loggedInUser"/Library/Application\ Support/ZoomPhone
+    /Users/"$loggedInUser"/Library/Application\ Support/ZoomUpdater
     /Users/"$loggedInUser"/Library/Caches/us.zoom.xos
+    /Users/"$loggedInUser"/Library/Caches/us.zoom.ZoomMeeting
     /Users/"$loggedInUser"/Library/Cookies/us.zoom.xos.binarycookies
     /Users/"$loggedInUser"/Library/Group\ Containers/*.ZoomClient3rd
     /Users/"$loggedInUser"/Library/HTTPStorages/us.zoom.xos
     /Users/"$loggedInUser"/Library/HTTPStorages/us.zoom.xos.binarycookies
-    /Users/"$loggedInUser"/Library/LaunchAgents/us.zoom.updater.gui.*.plist
-    /Users/"$loggedInUser"/Library/LaunchAgents/us.zoom.updater.gui.*.login.check.plist
+    /Users/"$loggedInUser"/Library/HTTPStorages/us.zoom.ZoomMeeting
+    /Users/"$loggedInUser"/Library/HTTPStorages/us.zoom.ZoomMeeting.binarycookies
+    /Users/"$loggedInUser"/Library/LaunchAgents/us.zoom.updater*.plist
+    /Users/"$loggedInUser"/Library/Logs/us.zoom.ZoomBridge
+    /Users/"$loggedInUser"/Library/Logs/us.zoom.ZoomOpener
+    /Users/"$loggedInUser"/Library/Logs/us.zoom.ZoomUninstaller
     /Users/"$loggedInUser"/Library/Logs/zoom.us
     /Users/"$loggedInUser"/Library/Logs/zoominstall.log
     /Users/"$loggedInUser"/Library/Logs/ZoomPhone
+    /Users/"$loggedInUser"/Library/Logs/ZoomUpdater
+    /Users/"$loggedInUser"/Library/Logs/zoomusinstall.log
+    /Users/"$loggedInUser"/Library/Logs/zzhost.log
     /Users/"$loggedInUser"/Library/Mobile\ Documents/iCloud~us~zoom~videomeetings
-    /Users/"$loggedInUser"/Library/Preferences/us.zoom.airhost.plist
-    /Users/"$loggedInUser"/Library/Preferences/us.zoom.caphost.plist
-    /Users/"$loggedInUser"/Library/Preferences/us.zoom.Transcode.plist
-    /Users/"$loggedInUser"/Library/Preferences/us.zoom.updater.config.plist
-    /Users/"$loggedInUser"/Library/Preferences/us.zoom.xos.Hotkey.plist
-    /Users/"$loggedInUser"/Library/Preferences/us.zoom.xos.plist
-    /Users/"$loggedInUser"/Library/Preferences/us.zoom.ZoomAutoUpdater.plist
-    /Users/"$loggedInUser"/Library/Preferences/us.zoom.ZoomClips.plist
+    /Users/"$loggedInUser"/Library/Preferences/us.zoom.*.plist*
     /Users/"$loggedInUser"/Library/Preferences/ZoomChat.plist
+    /Users/"$loggedInUser"/Library/Preferences/ZoomChineseChat.plist
     /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.bom
     /Users/"$loggedInUser"/Library/Receipts/us.zoom.pkg.videomeeting.plist
     /Users/"$loggedInUser"/Library/Saved\ Application\ State/us.zoom.xos.savedState
     /Users/"$loggedInUser"/Library/WebKit/us.zoom.xos
+    /Users/"$loggedInUser"/Library/WebKit/us.zoom.ZoomMeeting
 )
 
 for ENTRY in "${ZOOM_CRUFT[@]}"; do
