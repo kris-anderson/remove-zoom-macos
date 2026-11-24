@@ -75,30 +75,85 @@ terminated() {
 ###################
 
 loggedInUser=$(stat -f "%Su" /dev/console)
+loggedInUserID=$(id -u "$loggedInUser")
 
 # prompt the user for their password if required
 printf "\n%sPlease Note:%s This script will prompt for your password if you are not already running as sudo.\n" "${BOLD}" "${RESET}"
 
 sudo -v
 
-####################
-### kill process ###
-####################
+#############################
+### unload launchd jobs ###
+#############################
 
 header "Zoom Desktop Application"
 
-sub_header "Checking to see if the Zoom process is running"
+sub_header "Unloading Zoom launch agents and daemons"
 
-if pgrep -i "zoom.us" &>/dev/null; then
+# Deleting a launchd plist doesn't stop its job: launchd keeps it loaded (and
+# the root ZoomDaemon reachable) until logout or reboot. Boot each one out.
+ZOOM_LAUNCHD_JOBS_FOUND=0
 
-    sudo kill "$(pgrep -i zoom.us)"
+bootout_job() {
+    # $1 = launchd domain (system or gui/<uid>), $2 = job label
+    # never pass an empty label: "bootout system/" targets the whole domain
+    [ -n "$2" ] || return 0
+    if sudo launchctl print "$1/$2" &>/dev/null; then
+        sudo launchctl bootout "$1/$2" &>/dev/null
+        terminated
+        printf "%s/%s\n" "$1" "$2"
+        ZOOM_LAUNCHD_JOBS_FOUND=1
+    fi
+}
+
+plist_label() {
+    /usr/libexec/PlistBuddy -c "Print :Label" "$1" 2>/dev/null
+}
+
+for LABEL in us.zoom.ZoomDaemon us.zoom.ZMSipLocationHelper; do
+    bootout_job system "${LABEL}"
+done
+
+for PLIST in /Library/LaunchDaemons/us.zoom.*.plist; do
+    if [ -f "${PLIST}" ]; then
+        bootout_job system "$(plist_label "${PLIST}")"
+    fi
+done
+
+for PLIST in /Library/LaunchAgents/us.zoom.*.plist /Users/"$loggedInUser"/Library/LaunchAgents/us.zoom.*.plist; do
+    if [ -f "${PLIST}" ]; then
+        bootout_job "gui/${loggedInUserID}" "$(plist_label "${PLIST}")"
+    fi
+done
+
+if [ "${ZOOM_LAUNCHD_JOBS_FOUND}" -eq 0 ]; then
+    not_found
+    printf " Zoom launch agents and daemons\n"
+fi
+
+#####################
+### kill processes ###
+#####################
+
+sub_header "Checking to see if Zoom processes are running"
+
+# Zoom runs a dozen helpers from inside its bundle (caphost, aomhost, CptHost,
+# ZoomClips, ZoomUpdater, the CEF helpers), so match on the executable path.
+# The ^ anchor keeps it from matching the shell that runs this script. The
+# case-insensitive name match is the original check, kept for older installs.
+ZOOM_PROCESS_PATTERN='^(/Users/[^/]+)?/Applications/zoom\.us\.app/'
+
+if pgrep -f "${ZOOM_PROCESS_PATTERN}" &>/dev/null || pgrep -i "zoom.us" &>/dev/null; then
+
+    sudo pkill -f "${ZOOM_PROCESS_PATTERN}"
+    sudo pkill -i "zoom.us"
     terminated
-    printf "Zoom process\n"
+    printf "Zoom processes\n"
 
 else
 
     not_found
-    printf " Zoom process\n"
+    printf " Zoom processes\n"
 
 fi
 
@@ -144,6 +199,12 @@ else
 
 fi
 
+ZOOM_HAL_DRIVER=/Library/Audio/Plug-Ins/HAL/ZoomAudioDevice.driver
+ZOOM_HAL_DRIVER_FOUND=0
+if [ -d "${ZOOM_HAL_DRIVER}" ]; then
+    ZOOM_HAL_DRIVER_FOUND=1
+fi
+
 declare -a ZOOM_AUDIO_DEVICE=(
     /Library/Audio/Plug-Ins/HAL/ZoomAudioDevice.driver
 )
@@ -158,6 +219,15 @@ for ENTRY in "${ZOOM_AUDIO_DEVICE[@]}"; do
         printf "%s\n" "${ENTRY}"
     fi
 done
+
+# coreaudiod keeps a deleted HAL driver loaded, so the Zoom microphone and
+# speaker stay listed until it restarts. launchd restarts it right away; audio
+# drops for a second. Zoom's own IT installer restarts it the same way.
+if [ "${ZOOM_HAL_DRIVER_FOUND}" -eq 1 ] && [ ! -d "${ZOOM_HAL_DRIVER}" ]; then
+    sudo killall coreaudiod
+    terminated
+    printf "coreaudiod, to unload ZoomAudioDevice.driver (it restarts on its own)\n"
+fi
 
 ######################
 ### remove plugins ###
@@ -332,7 +402,7 @@ sub_header "Killing Zoom Outlook Plugin Launcher if running"
 
 if pgrep -i PluginLauncher &>/dev/null; then
 
-    sudo kill "$(pgrep -i PluginLauncher)"
+    sudo pkill -i PluginLauncher
     terminated
     printf "Zoom PluginLauncher process\n"
 
@@ -351,7 +421,7 @@ sub_header "Unloading Zoom Outlook Plugin LaunchAgent"
 
 if pgrep -i zOutlookPluginAgent &>/dev/null; then
 
-    sudo su - "$loggedInUser" -c "/bin/launchctl unload -wF /Library/LaunchAgents/us.zoom.pluginagent.plist" &>/dev/null
+    sudo launchctl bootout "gui/${loggedInUserID}" /Library/LaunchAgents/us.zoom.pluginagent.plist &>/dev/null
     terminated
     printf "Zoom OutlookPlugin Agent process\n"
 
